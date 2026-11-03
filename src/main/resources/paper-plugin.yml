@@ -1,0 +1,20 @@
+name: pulse
+version: '${version}'
+
+main: org.example1.pulse.Pulse
+api-version: '26.3'
+load: POSTWORLD
+
+commands:
+  pulse:
+    description: Админская панель и аналитика сервера Pulse
+    usage: '/pulse [menu|info|top|online|new|retention|when|web|link|module|reload]'
+    permission: pulse.admin
+
+permissions:
+  pulse.use:
+    description: Доступ к команде /pulse (только для администраторов)
+    default: op
+  pulse.admin:
+    description: Полный административный доступ к аналитике, GUI и командам Pulse
+    default: op

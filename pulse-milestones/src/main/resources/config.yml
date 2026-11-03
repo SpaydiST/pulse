@@ -1,0 +1,20 @@
+# Тихий учёт рубежей по активному времени и сериям дней.
+milestones:
+  enabled: true
+  rules:
+    - id: "playtime_1h"
+      type: "playtime"
+      hours: 1
+      commands: []
+    - id: "playtime_10h"
+      type: "playtime"
+      hours: 10
+      commands: []
+    - id: "playtime_50h"
+      type: "playtime"
+      hours: 50
+      commands: []
+    - id: "streak_7d"
+      type: "streak"
+      days: 7
+      commands: []

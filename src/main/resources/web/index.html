@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Pulse · Аналитика</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oxanium:wght@400;500;600;700;800&family=Rubik+Mono+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/app.css">
+<link rel="stylesheet" href="/modules/chat.css">
+<link rel="stylesheet" href="/modules/macronuxdam.css">
+</head>
+<body>
+<div class="shell" id="app">
+
+  <!-- ═══════════ Sidebar ═══════════ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="side-scroll">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-text">Pulse<span class="brand-dot">.</span></span>
+        <span class="brand-ver" id="brand-ver">v?</span>
+      </div>
+      <div class="brand-ping" id="brand-ping">
+        <span class="dot dot-online"></span><span id="ping-label" data-i18n="ping.connecting">соединение…</span>
+      </div>
+
+      <nav class="nav" id="main-nav">
+        <button class="nav-link" data-route="/overview" data-i18n-title="nav.overview">
+          <span class="nav-ico">📊</span><span data-i18n="nav.overview">Обзор</span>
+        </button>
+        <button class="nav-link" data-route="/players" data-i18n-title="nav.players">
+          <span class="nav-ico">👥</span><span data-i18n="nav.players">Игроки</span>
+        </button>
+        <button class="nav-link" data-route="/chat" data-i18n-title="nav.chat">
+          <span class="nav-ico">💬</span><span data-i18n="nav.chat">Игровой чат</span>
+        </button>
+        <button class="nav-link" data-route="/deaths" data-i18n-title="nav.deaths">
+          <span class="nav-ico">☠️</span><span data-i18n="nav.deaths">Смерти</span>
+        </button>
+        <button class="nav-link" data-route="/server" data-i18n-title="nav.server">
+          <span class="nav-ico">⚡</span><span data-i18n="nav.server">Сервер</span>
+        </button>
+        <button class="nav-link" data-route="/analytics" data-i18n-title="nav.analytics">
+          <span class="nav-ico">📈</span><span data-i18n="nav.analytics">Аналитика</span>
+        </button>
+        <button class="nav-link" id="nav-dap" data-route="/dap" data-i18n-title="nav.dap" hidden>
+          <span class="nav-ico">🛡️</span><span data-i18n="nav.dap">MacronuxDAM</span>
+        </button>
+      </nav>
+
+      <div class="side-block">
+        <div class="side-head">
+          <span class="side-label" data-i18n="side.servers">Серверы</span>
+          <button class="side-link-btn" id="link-panels-btn" type="button" title="Связать панели серверов" data-i18n="side.linkBtn" data-i18n-title="side.linkTitle">+ Связать</button>
+        </div>
+        <div class="srv-list" id="srv-list"></div>
+      </div>
+    </div>
+
+    <div class="side-foot">
+      <button class="side-btn" id="modules-btn" type="button" title="Дополнительные модули и расширения (MacronuxDAM)">
+        <span>🧩</span><span id="modules-label">Модули</span>
+      </button>
+      <button class="side-btn" id="lang-btn" type="button" title="Язык интерфейса" data-i18n-title="side.langTitle">
+        <span>🌐</span><span id="lang-label">Русский</span>
+      </button>
+      <button class="side-btn" id="theme-btn" type="button" title="Переключить тему" data-i18n-title="side.themeTitle">
+        <span class="theme-ico" id="theme-ico">🌓</span><span id="theme-label">Тема</span>
+      </button>
+      <button class="side-btn" id="tz-btn" type="button" title="Часовой пояс" data-i18n-title="side.tzTitle">
+        <span>🕒</span><span id="tz-label">Время: Сервер</span>
+      </button>
+      <a class="side-btn" href="https://github.com/anomalyco/pulse" target="_blank" rel="noopener">
+        <span>📖</span><span data-i18n="side.docs">Документация</span>
+      </a>
+    </div>
+  </aside>
+
+  <div class="drawer-overlay" id="drawer-overlay" hidden></div>
+
+  <!-- ═══════════ Main ═══════════ -->
+  <div class="main">
+    <header class="topbar">
+      <button class="icon-btn burger" id="burger-btn" type="button" title="Меню" aria-label="Меню" data-i18n-title="top.menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+
+      <div class="search" id="gsearch">
+        <svg class="search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+        <input id="gsearch-input" type="text" placeholder="Поиск игрока…  (Ctrl K)" data-i18n-placeholder="top.searchPlaceholder" autocomplete="off" spellcheck="false">
+        <span class="search-kbd" id="search-kbd">Ctrl K</span>
+        <div class="search-res" id="gsearch-res"></div>
+      </div>
+
+      <div class="period seg" id="period">
+        <button class="seg-btn" data-period="24h" data-i18n="top.p24h">24 часа</button>
+        <button class="seg-btn" data-period="7d" data-i18n="top.p7d">7 дней</button>
+        <button class="seg-btn" data-period="30d" data-i18n="top.p30d">30 дней</button>
+        <button class="seg-btn" data-period="all" data-i18n="top.pall">Всё время</button>
+        <button class="seg-btn" data-period="custom" data-i18n="top.pcustom">Даты…</button>
+      </div>
+
+      <div class="status-pill" id="status-pill" title="Статус сервера" data-i18n-title="top.statusTitle">
+        <span class="dot" id="status-dot"></span>
+        <span id="status-text">Онлайн: — | TPS: — | Uptime: —</span>
+      </div>
+      <div class="freshness">
+        <span id="freshness-text" role="status" aria-live="polite"></span>
+        <button id="refresh-btn" class="refresh-btn" type="button" data-i18n="top.refresh">Обновить</button>
+      </div>
+    </header>
+
+    <main class="content" id="view">
+      <div class="bootscreen"><span class="spinner"></span><span data-i18n="boot.loading">загрузка Pulse…</span></div>
+    </main>
+  </div>
+</div>
+
+<!-- ═══════════ Вход ═══════════ -->
+<div class="login-modal" id="login-modal" role="dialog" aria-modal="true" hidden>
+  <form class="login-card" id="login-form" autocomplete="off">
+    <div class="login-logo"><span class="brand-mark"></span>Pulse</div>
+    <p class="login-sub" data-i18n="login.sub">Дашборд защищён паролем — войдите, чтобы продолжить.</p>
+    <label class="login-label" for="login-pass" data-i18n="login.passLabel">Пароль</label>
+    <input id="login-pass" class="login-input" type="password" placeholder="••••••••" autocomplete="current-password">
+    <div class="login-err" id="login-err" role="alert"></div>
+    <button class="login-btn" id="login-btn" type="submit" data-i18n="login.submit">Войти</button>
+  </form>
+</div>
+
+<script src="/vendor/chart.umd.min.js"></script>
+<script src="/i18n.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>

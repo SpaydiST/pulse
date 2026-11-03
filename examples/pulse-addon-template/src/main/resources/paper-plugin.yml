@@ -1,0 +1,13 @@
+name: PulseAddonExample
+version: '${version}'
+
+main: dev.example.pulseaddon.PulseAddonExample
+api-version: '26.3'
+load: POSTWORLD
+
+dependencies:
+  server:
+    pulse:
+      load: BEFORE
+      required: true
+      join-classpath: true

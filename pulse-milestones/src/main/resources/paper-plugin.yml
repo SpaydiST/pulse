@@ -1,0 +1,13 @@
+name: PulseMilestones
+version: '${version}'
+
+main: org.example1.pulse.milestones.PulseMilestonesPlugin
+api-version: '26.3'
+load: POSTWORLD
+
+dependencies:
+  server:
+    pulse:
+      load: BEFORE
+      required: true
+      join-classpath: true
